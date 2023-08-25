@@ -1,0 +1,19 @@
+{
+  "name": "firefly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
+    "cheerio": "^1.0.0-rc.12",
+    "discord.js": "^14.13.0",
+    "discord.js-pagination": "^1.0.3",
+    "dotenv": "^16.3.1"
+  }
+}
