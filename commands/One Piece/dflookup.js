@@ -115,6 +115,12 @@ module.exports = {
     name: 'dflookup',
     desc: 'Looks up a devil fruit on the One Piece wiki.',
     aliases: ['df'],
+    args: {
+        FruitName: {
+            Optional: false,
+            Desc: 'The fruit to lookup. Note: Not all fruits have been added yet!'
+        }
+    },
     category: 'One Piece',
     async execute(data) {
         const fruit = data.args[0];
