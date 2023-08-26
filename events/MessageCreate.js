@@ -16,6 +16,6 @@ module.exports = {
             return;
         }
 
-        cmd.execute({ author: msg.author, channel: msg.channel, args: args });
+        cmd.execute({ args: args, author: msg.author, bot: bot, channel: msg.channel });
     }
 }

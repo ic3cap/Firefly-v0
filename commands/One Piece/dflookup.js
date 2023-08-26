@@ -2,6 +2,7 @@ module.exports = {
     name: 'dflookup',
     desc: 'Looks up a devil fruit on the One Piece wiki.',
     aliases: ['df'],
+    category: 'One Piece',
     execute(data) {
 
     }
