@@ -1,49 +1,32 @@
-const { Client, Events, GatewayIntentBits, ActivityType } = require('discord.js');
-const fs = require('node:fs');
-const config = require('./config.json');
-const cmdFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const cmds = []
-const defaults = config.default;
-const bot = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMembers
-    ]
-});
+const Discord = require('discord.js');
+const { config } = require('dotenv');
+const fs = require('fs');
 
-for (file in cmdFiles) {
-    file = cmdFiles[file];
-    const cmd = require(`./commands/${file}`);
-    let aliases = cmd.hasOwnProperty('aliases') && cmd['aliases'];
-    if (aliases) {
-        for (alias in aliases) {
-            cmds[aliases[alias]] = cmd;
-        };
-    };
-    cmds[cmd.name] = cmd;
+const folders = {
+    commands: fs.readdirSync('./commands'),
+    events: fs.readdirSync('./events'),
+    handlers: fs.readdirSync('./handlers')
 }
 
-bot.once(Events.ClientReady, () => {
-    bot.user.setPresence({ status: 'idle', activities: [{ name: 'Catching fireflies', type: ActivityType.Custom }], status: 'idle' });
-    console.log(`Up and running as ${bot.user.tag}.`);
+const bot = new Discord.Client({
+    intents: [
+        Discord.GatewayIntentBits.Guilds,
+        Discord.GatewayIntentBits.GuildMessages,
+        Discord.GatewayIntentBits.MessageContent,
+        Discord.GatewayIntentBits.GuildMembers
+    ],
 });
 
-bot.on(Events.MessageCreate, async msg => {
-    if (!msg.content.startsWith(defaults.prefix) && !msg.content.startsWith(bot.user.tag)) {
-        console.log('poof');
-        return;
+for (ev in folders.events) {
+    ev = folders.events[ev]
+    let evName = ev.slice(0, ev.indexOf('.'));
+    let evData = require(`./events/${ev}`);
+    if (evData.type === 'once') {
+        bot.once(Discord.Events[evName], args => evData.triggered(bot, args));
+    } else {
+        bot.on(Discord.Events[evName], args => evData.triggered(bot, args));
     };
-    let content = msg.content;
-    const args = content.slice(defaults.prefix.length).split(/ +/);
-    let cmd = args.shift().toLowerCase();
-    console.log('args ' + args);
-    console.log('cmd ' + cmd);
-    if (cmds.hasOwnProperty(cmd)) {
-        cmd = cmds[cmd];
-        cmd.execute({ author: msg.author, channel: msg.channel, args: args });
-    }
-});
+};
 
-bot.login(config.token);
+config();
+bot.login(process.env.TOKEN);
