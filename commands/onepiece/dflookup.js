@@ -1,3 +1,12 @@
+module.exports = {
+    name: 'dflookup',
+    desc: 'Looks up a devil fruit on the One Piece wiki.',
+    aliases: ['df'],
+    execute(data) {
+
+    }
+}
+/*
 const { EmbedBuilder } = require('discord.js');
 const pagination = require('discord.js-pagination');
 const axios = require('axios');
@@ -64,3 +73,4 @@ module.exports = {
         };
     }
 }
+*/

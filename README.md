@@ -1,1 +1,1 @@
-i'm a noob pls
+My first Discord bot :)

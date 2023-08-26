@@ -1,6 +1,7 @@
 module.exports = {
     type: 'once',
-    triggered(bot, args) {
-        console.log(`Logged in as: ${bot.user.tag}.`);
+    triggered(bot) {
+        bot.user.setPresence({ status: 'idle', activities: [{ name: 'Catching fireflies', type: 4 }], status: 'idle' });
+        console.log(`Logged in as: ${bot.user.tag}`);
     }
 }
