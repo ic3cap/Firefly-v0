@@ -2,8 +2,8 @@ const { EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const dir = path.join(__dirname, '../');
+const categories = ['Misc', 'Moderation', 'One Piece', 'Server'];
 
-// TODO: if you pass in a category, return cmds of that category
 const getCmdArgs = cmdData => {
     let argFieldValue = '';
     for (const arg in cmdData.args) {
@@ -27,9 +27,13 @@ module.exports = {
     category: 'Misc',
     async execute(data) {
         if (data.args.length > 0) {
+
             let cmd = data.args[0];
             let cmdData = data.bot.commands.get(cmd);
+            let category = (categories.indexOf(data.args[0]) > -1 && categories[categories.indexOf(data.args[0])]) || (data.args.length > 1 && categories[categories.indexOf(data.args.join(' '))]);
+            
             if (cmdData) {
+
                 let helpEmbed = new EmbedBuilder()
                     .setTitle(`Command: ${cmd}`)
                     .setColor([255, 150, 0])
@@ -38,6 +42,24 @@ module.exports = {
                         value: `${getCmdArgs(cmdData) === '' ? 'No arguments found!' : getCmdArgs(cmdData)}`
                     })
                     .setDescription(this.desc);
+                data.channel.send({ embeds: [helpEmbed] });
+                return;
+
+            } else if (category) {
+
+                let cmds = fs.readdirSync(`${dir}/${category}`).filter(file => file.endsWith('.js'));
+                let desc = '';
+                cmds.forEach(cmd => {
+                    cmd = cmd.slice(0, cmd.indexOf('.'));
+                    let cmdData = data.bot.commands.get(cmd);
+                    let aliases = cmdData.aliases.join(', ');
+                    desc = desc.concat('\n\n', `**${cmd}**: ${cmdData.desc}\n\n **Aliases**: ${aliases}\n **Arguments**: ${getCmdArgs(cmdData) === '' ? 'No arguments found!' : getCmdArgs(cmdData)}`);
+                })
+
+                let helpEmbed = new EmbedBuilder()
+                    .setTitle(`Category: ${category}`)
+                    .setColor([255, 150, 0])
+                    .setDescription(desc);
                 data.channel.send({ embeds: [helpEmbed] });
                 return;
             } else {
@@ -52,13 +74,15 @@ module.exports = {
         let desc = '';
         fs.readdirSync(dir).forEach(category => {
             let categoryCmds = fs.readdirSync(`${dir}/${category}`).filter(file => file.endsWith('.js'));
+
             if (categoryCmds.length > 0) {
                 desc = desc.concat('\n\n', `**${category}**`);
                 categoryCmds.forEach(cmd => {
                     cmd = cmd.slice(0, cmd.indexOf('.'));
                     desc = desc.concat('\n', `${cmd}: ${data.bot.commands.get(cmd).desc}`);
-                })
-            }
+                });
+            };
+
         });
 
         helpEmbed.setDescription(desc);
