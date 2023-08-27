@@ -15,7 +15,7 @@ module.exports = {
         if (!cmd) {
             return;
         }
-
+        //console.log(msg.guild);
         cmd.execute({ args: args, author: msg.author, bot: bot, channel: msg.channel, msg: msg });
     }
 }

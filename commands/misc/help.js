@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const dir = path.join(__dirname, '../');
 
+// TODO: if you pass in a category, return cmds of that category
 const getCmdArgs = cmdData => {
     let argFieldValue = '';
     for (const arg in cmdData.args) {
@@ -24,7 +25,7 @@ module.exports = {
         }
     },
     category: 'Misc',
-    execute(data) {
+    async execute(data) {
         if (data.args.length > 0) {
             let cmd = data.args[0];
             let cmdData = data.bot.commands.get(cmd);
@@ -34,7 +35,7 @@ module.exports = {
                     .setColor([255, 150, 0])
                     .addFields({ name: 'Category', value: `${cmdData.category}` }, { name: 'Aliases', value: `${cmdData.aliases.join(', ')}` }, {
                         name: 'Arguments',
-                        value: `${getCmdArgs(cmdData)}`
+                        value: `${getCmdArgs(cmdData) === '' ? 'No arguments found!' : getCmdArgs(cmdData)}`
                     })
                     .setDescription(this.desc);
                 data.channel.send({ embeds: [helpEmbed] });

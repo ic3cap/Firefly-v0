@@ -3,7 +3,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fruits = {
     'Yami Yami no Mi': {
-        image: 'https://i.imgur.com/vZrTdl0.png'
+        image: 'https://i.imgur.com/vZrTdl0.png',
+        color: [0, 0, 0]
     },
     default: {
         image: ''
@@ -66,9 +67,8 @@ const createFruitEmbed = async (link, fruit, msg, data) => {
 
         for (let i = 0; i < numPages; i++) {
             let embed = new EmbedBuilder()
-                .setColor(255, 255, 255)
+                .setColor(fruits[fruit].color)
                 .setTitle(`Devil Fruit Encyclopedia: ${fruit}`)
-                //.setDescription(fullText.slice(pos, pos + cap).trimEnd())
                 .setDescription(pageDescs[i])
                 .setThumbnail(fruitImage)
                 .setFooter({ text: `Page: ${i + 1} / ${numPages}` });
