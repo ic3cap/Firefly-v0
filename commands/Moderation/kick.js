@@ -15,7 +15,7 @@ module.exports = {
         }
     },
     category: 'Moderation',
-    async execute({ args, author, msg }) {
+    async execute({ args, author, msg, channel }) {
         let victim = args[0];
         victim = victim.replace('<@', '').replace('>', '');
 
@@ -38,5 +38,6 @@ module.exports = {
         }
 
         victim.kick(reason);
+        channel.send(`Successfully kicked user ${victim} with reason: ${reason}`);
     }
 }

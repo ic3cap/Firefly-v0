@@ -29,9 +29,9 @@ module.exports = {
         if (data.args.length > 0) {
 
             let cmd = data.args[0];
-            let cmdData = data.bot.commands.get(cmd);
+            let cmdData = data.bot.commands.get(cmd) || data.bot.commands.get(cmd.toLowerCase());
             let category = (categories.indexOf(data.args[0]) > -1 && categories[categories.indexOf(data.args[0])]) || (data.args.length > 1 && categories[categories.indexOf(data.args.join(' '))]);
-            
+
             if (cmdData) {
 
                 let helpEmbed = new EmbedBuilder()

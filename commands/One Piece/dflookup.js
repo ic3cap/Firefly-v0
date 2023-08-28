@@ -98,10 +98,16 @@ const createFruitEmbed = async (link, fruit, msg, data) => {
         collector.on('collect', async interaction => {
             if (interaction.customId === 'flipFront' && currentPage < numPages) {
                 currentPage++;
-                await msg.edit({ content: 'Here you go!', embeds: [pages[currentPage]], components: [buttonRow] });
+                await msg.edit({ embeds: [pages[currentPage]], components: [buttonRow] }); //content: 'Here you go!',
             } else if (interaction.customId === 'flipBack' && currentPage > 0) {
                 currentPage--;
-                await msg.edit({ content: 'Here you go!', embeds: [pages[currentPage]], components: [buttonRow] });
+                await msg.edit({ embeds: [pages[currentPage]], components: [buttonRow] }); //content: 'Here you go!',
+            } else if (interaction.customId === 'flipFront' && currentPage === numPages) {
+                currentPage = 0;
+                await msg.edit({ embeds: [pages[currentPage]], components: [buttonRow] });
+            } else if (interaction.customId === 'flipBack' && currentPage === 0) {
+                currentPage = pages.length - 1;
+                await msg.edit({ embeds: [pages[currentPage]], components: [buttonRow] });
             }
         })
 
