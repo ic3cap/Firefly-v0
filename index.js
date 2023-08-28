@@ -16,8 +16,5 @@ bot.aliases = new Discord.Collection();
 
 fs.readdirSync('./loaders').forEach(loader => require(`./loaders/${loader}`)(bot));
 
-//console.log(bot.commands);
-//console.log(bot.aliases);
-
 config();
 bot.login(process.env.TOKEN);
